@@ -18,12 +18,26 @@ void setup()
   for (int i = 0; i < 4; i++) {
     pinMode(switchPins[i], INPUT_PULLUP);
   }
+  Serial.begin(9600);
+  digitalWrite(ledPin, LOW); // Eteint la LED
 }
 
 void loop()
 {
+    if (Serial.available() > 0) {
+      char data = Serial.read();
+      if (data == '1') {
+        digitalWrite(LED, HIGH); // Allumer la LED
+      }
+    }
   
   if(detected){
+    if (Serial.available() > 0) {
+      char data = Serial.read();
+      if (data == '1') {
+        digitalWrite(LED, HIGH); // Allumer la LED
+      }
+    }
     switch(getPositionFromButtons(switchPins)) 
     {
         case 0: {
@@ -83,6 +97,12 @@ void loop()
   }
 
   while(!detected) {
+    if (Serial.available() > 0) {
+      char data = Serial.read();
+      if (data == '1') {
+        digitalWrite(LED, HIGH); // Allumer la LED
+      }
+    }
     currentPositionStep = 0;
     digitalWrite(dirPin, HIGH);
     int sensorStatus = digitalRead(sensor);
@@ -100,11 +120,11 @@ void loop()
 
 bool isSensorDetected(int sensorStatus){
   if(sensorStatus == HIGH){
-    digitalWrite(LED, LOW); // LED LOW
+    //digitalWrite(LED, LOW); // LED LOW
     return false;
   }
   else{
-    digitalWrite(LED, HIGH); // LED HIGH
+    //digitalWrite(LED, HIGH); // LED HIGH
     return true;
   }
 }

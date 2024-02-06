@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>Hello from Electron renderer!</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="container">
+        <h2>Position actuelle: <span id="positionNumber"></span></h2>
+        <svg class="rotating-element" width="400" height="25" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="50" x="0" y="0" rx="0" ry="0" fill="blue" />
+            Sorry, your browser does not support inline SVG.  
+        </svg>
+        <div id="buttons">
+            <button id="btn0" class="button">0</button>
+            <button id="btn1" class="button">1</button>
+            <button id="btn2" class="button">2</button>
+            <button id="btn3" class="button">3</button>
+            <button id="btn4" class="button">4</button>
+            <button id="btn5" class="button">5</button>
+            <button id="btn6" class="button">6</button>
+            <button id="btn7" class="button">7</button>
+            <button id="btn8" class="button">8</button>
+            <button id="btn9" class="button">9</button>
+            <button id="btn10" class="button">10</button>
+            <!-- Ajoutez autant de boutons que nécessaire -->
+        </div>
+    </div>
+    <div class="container">
+        <p id="logs"></p>
+    </div>
+  </body>
+  <script src="./renderer.js"></script>
+</html>
