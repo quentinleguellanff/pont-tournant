@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <h2>Position actuelle: <span id="positionNumber"></span></h2>
     <div class="container">
-        <h2>Position actuelle: <span id="positionNumber"></span></h2>
         <svg class="rotating-element" width="400" height="25" xmlns="http://www.w3.org/2000/svg">
             <rect width="400" height="50" x="0" y="0" rx="0" ry="0" fill="blue" />
             Sorry, your browser does not support inline SVG.  
@@ -35,9 +35,12 @@
             <!-- Ajoutez autant de boutons que nécessaire -->
         </div>
     </div>
-    <div class="container">
-        <p id="logs"></p>
+    <div>
+      <p>sélectionner le port série sur correspondant à votre carte arduino:</p>
+      <div id="comButtons"></div>
     </div>
+    <p id="logs"></p>
+
   </body>
   <script src="./renderer.js"></script>
 </html>

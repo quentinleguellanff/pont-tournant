@@ -1,43 +1,57 @@
 const { SerialPort } = require('serialport')
 const logs = document.getElementById('logs');
+const comButtons = document.getElementById('comButtons');
+let port = null;
 
 async function listSerialPorts() {
+  let paths = []
   await SerialPort.list().then((ports) => {
-    arduinoPort = ports.find(port => port.manufacturer && port.manufacturer.includes('Arduino'));
-    if (arduinoPort) {
-      const port = new SerialPort(arduinoPort.path, { baudRate: 9600 });
-      port.on('open', () => {
-        logs.innerText = 'Connexion réussie à l\'Arduino.';
-        // Envoyer des données à l'Arduino
-        port.write('1', (err) => {
-          if (err) {
-            logs.innerText = 'Erreur lors de l\'envoi des données :' + err;
-          } else {
-            logs.innerText = 'Données envoyées avec succès.';
-          }
-        });
-      });
-      port.on('error', err => {
-        logs.innerText = 'Erreur de connexion à l\'Arduino :' + err;
-      });
-    } else {
-        logs.innerText = 'Arduino non trouvé.';
-    }
+    ports.forEach(port => {
+      var buttonPort = document.createElement("button");
+      buttonPort.innerText = port.path
+      buttonPort.id = port.path
+      comButtons.appendChild(buttonPort)
+      paths.push(port.path)
+    });
   }).catch(err => {
     logs.innerText = 'Erreur lors de la recherche des ports série :' + err;
   });
-}
-
-function listPorts() {
-  listSerialPorts();
-  setTimeout(listPorts, 2000);
+  return paths
 }
 
 // Set a timeout that will check for new serialPorts every 2 seconds.
 // This timeout reschedules itself.
-setTimeout(listPorts, 2000);
+//setTimeout(listPorts, 2000);
 
-listSerialPorts()
+async function start() {
+  listSerialPorts().then(paths => {
+    paths.forEach(path => {
+      document.getElementById(path).addEventListener("click", function() {connectToSerialPort(path)});
+    })
+  })
+}
+
+function connectToSerialPort(path) {
+  port = new SerialPort({path: path, baudRate: 9600 });
+  port.on('open', () => {
+    logs.innerText = 'Connexion réussie à l\'Arduino.';
+    // Envoyer des données à l'Arduino
+    port.write('1', (err) => {
+      if (err) {
+        logs.innerText = 'Erreur lors de l\'envoi des données :' + err;
+      } else {
+        logs.innerText = 'Données envoyées avec succès.';
+      }
+    });
+  });
+  port.on('error', err => {
+    logs.innerText = 'Erreur de connexion à l\'Arduino :' + err;
+  });
+}
+
+start();
+
+
 
 const object = document.querySelector('.rotating-element');
 const rotateBtn1 = document.getElementById('btn1');
@@ -76,18 +90,40 @@ const buttonsList = document.getElementById("buttons");
 
 
 function rotateBridge(rotateBtn, degre) {
+  let position = null;
     rotateBtn.addEventListener('click', () => {
-        rotationAngle = rotationAngle - lastPosition + degre; // Augmentez ou diminuez le nombre de degrés selon vos besoins
-        object.style.transform = `rotate(${rotationAngle}deg)`;
-        rotateBtn.disabled = true;
-        lastPosition = degre;
-        for (let i = 0; i < buttonsList.children.length; i++) {
-            if(buttonsList.children[i] !== rotateBtn){
-                buttonsList.children[i].disabled = false;
+        if(port != null){
+          port.on('open', () => {
+            logs.innerText = 'Connexion réussie à l\'Arduino.';
+            for (let i = 0; i < buttonsList.children.length; i++) {
+              if(buttonsList.children[i] == rotateBtn){
+                 position = i;
+              }
             }
-            if(buttonsList.children[i] == rotateBtn){
-                positionSpan.innerText = `${i}`;
-            }
-          }
+            // Envoyer des données à l'Arduino
+            port.write(toString(position), (err) => {
+              if (err) {
+                logs.innerText = 'Erreur lors de l\'envoi des données :' + err;
+              } else {
+                rotationAngle = rotationAngle - lastPosition + degre; // Augmentez ou diminuez le nombre de degrés selon vos besoins
+                object.style.transform = `rotate(${rotationAngle}deg)`;
+                rotateBtn.disabled = true;
+                lastPosition = degre;
+                for (let i = 0; i < buttonsList.children.length; i++) {
+                    if(buttonsList.children[i] !== rotateBtn){
+                        buttonsList.children[i].disabled = false;
+                    }
+                    if(buttonsList.children[i] == rotateBtn){
+                        positionSpan.innerText = `${i}`;
+                    }
+                  }
+                logs.innerText = 'Données envoyées avec succès.';
+              }
+            });
+          });
+          port.on('error', err => {
+            logs.innerText = 'Erreur de connexion à l\'Arduino :' + err;
+          });
+        }
     });
 }
