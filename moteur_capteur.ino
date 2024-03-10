@@ -25,20 +25,21 @@ void loop()
 {
   
   if(detected){
-    if (Serial.available() > 0) {
-      char data = Serial.read();
-      switch(getPositionFromButtons(data)) 
+    if(Serial.available() > 0) {
+      String data = Serial.readString();
+      Serial.println(data);
+      switch(data.toInt()) 
       {
           case 0: {
             rotateBridge(&lastPosition, &currentPositionStep, 0, 0);
             break;
           }
           case 1: {
-            rotateBridge(&lastPosition, &currentPositionStep, 1, -444);
+            rotateBridge(&lastPosition, &currentPositionStep, 1, 320);
             break;
           }
           case 2: {
-            rotateBridge(&lastPosition, &currentPositionStep, 2, -284);
+            rotateBridge(&lastPosition, &currentPositionStep, 2, 160);
             break;
           }
           case 3: {
@@ -46,37 +47,37 @@ void loop()
             break;
           }
           case 4: {
-            rotateBridge(&lastPosition, &currentPositionStep, 4, 284);
+            rotateBridge(&lastPosition, &currentPositionStep, 4, -160);
             break;
           }
           case 5: {
-            rotateBridge(&lastPosition, &currentPositionStep, 5, 444);
+            rotateBridge(&lastPosition, &currentPositionStep, 5, -320);
             break;
           }
           case 6: {
-            rotateBridge(&lastPosition, &currentPositionStep, 6, 604);
+            rotateBridge(&lastPosition, &currentPositionStep, 6, -480);
             break;
           }
           case 7: {
-            rotateBridge(&lastPosition, &currentPositionStep, 7, 764);
+            rotateBridge(&lastPosition, &currentPositionStep, 7, -640);
             break;
           }
           case 8: {
-            rotateBridge(&lastPosition, &currentPositionStep, 8, 924);
+            rotateBridge(&lastPosition, &currentPositionStep, 8, -800);
             break;
           }
           case 9: {
-            rotateBridge(&lastPosition, &currentPositionStep, 9, 1084);
+            rotateBridge(&lastPosition, &currentPositionStep, 9, -960);
             break;
           }
           case 10: {
-            rotateBridge(&lastPosition, &currentPositionStep, 10, 1244);
+            rotateBridge(&lastPosition, &currentPositionStep, 10, -1120);
             break;
           }
           case 15:
             if(lastPosition != 15) {
               moveBackward(3200);
-              currentPositionStep += 3200;
+              currentPositionStep -= 3200;
               lastPosition = 15;
             }
             break;
