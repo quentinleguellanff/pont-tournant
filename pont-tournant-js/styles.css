@@ -1,8 +1,12 @@
 .container {
-    width: 400px; /* Ajustez la largeur et la hauteur selon vos besoins */
-    height: 400px;
-    margin: 200px auto;
+    width: 509px;
+    padding-left: 100px;
+    padding-top: 200px;
+    height: 350px;
+    margin: 0px auto;
     margin-bottom: 0px;
+    background-image: url("images/plaque_tournante.jpg");
+    background-size: cover;
 }
 
 .rotating-element {
@@ -11,13 +15,6 @@
     top: 50%;
     transform-origin: center;
     transition: transform 1000ms linear;
-}
-
-#buttons {
-    /* position: absolute; */
-    /* top: 50%; */
-    /* left: 50%; */
-    /* transform: translate(-50%, -50%); */
 }
 
 .button {
